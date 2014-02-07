@@ -31,15 +31,51 @@ BMC Software
 
 * Args
 
-.play /presentation/args.go
+  package main
+  
+  import (
+  	"fmt"
+  	"os"
+  )
+  
+  func main() {
+  	fmt.Println(os.Args)
+  }
+  
 
 * Go flags
 
-.play /presentation/flags.go
+  package main
+  
+  import (
+  	"flag"
+  	"fmt"
+  )
+  
+  func main() {
+  	var dbIp = flag.String("db_ip", "127.0.0.1", "ip address for databse host")
+  	flag.Parse()
+  	fmt.Printf("Database ip address: %v\n", *dbIp)
+  }
 
 * Go flags init
 
-.play /presentation/flags_init.go
+  package main
+  
+  import (
+  	"flag"
+  	"fmt"
+  )
+  
+  var dbIp = flag.String("db_ip", "127.0.0.1", "ip address for databse host")
+  
+  func init() {
+  	flag.Parse()
+  }
+  
+  func main() {
+  	fmt.Printf("Database ip address: %v\n", *dbIp)
+  }
 
 * Flag types
 
@@ -53,15 +89,63 @@ BMC Software
 
 * Go flags variables
 
-.play /presentation/flags_var.go
+  package main
+  
+  import (
+  	"flag"
+  	"fmt"
+  )
+  
+  func main() {
+  	var dbIp string
+  	flag.StringVar(&dbIp, "db_ip", "127.0.0.1", "ip address for database host")
+  	flag.Parse()
+  	fmt.Printf("Database ip address: %v\n", dbIp)
+  }
 
 * Print defaults
 
-.play /presentation/flags_help.go
+  package main
+  
+  import (
+  	"flag"
+  	"fmt"
+  )
+  
+  func main() {
+  	var dbIp string
+  	var help bool
+  	flag.StringVar(&dbIp, "db_ip", "127.0.0.1", "ip address for database host")
+  	flag.BoolVar(&help, "help", false, "show this help message")
+  	flag.Parse()
+  	if help {
+  		flag.PrintDefaults()
+  		return
+  	}
+  	fmt.Printf("Database ip address: %v\n", dbIp)
+  }
 
 * Go flagset
 
-.play /presentation/flagset.go
+  package main
+  
+  import (
+  	"flag"
+  	"fmt"
+  	"os"
+  )
+  
+  func main() {
+  	f := flag.NewFlagSet("flag", flag.ExitOnError)
+  	dbIp := f.String("db_ip", "127.0.0.1", "ip address for databse host")
+  	help := f.Bool("help", false, "show this help message")
+  	f.Parse(os.Args[1:])
+  	if *help {
+  		f.PrintDefaults()
+  		return
+  	}
+  	fmt.Printf("Database ip address: %v\n", *dbIp)
+  }
 
 * Writing tools with git like interface
 
@@ -81,7 +165,28 @@ BMC Software
 
 * Go flags handler
 
-.play /presentation/gofh.go
+  package main
+  import (
+      "github.com/romanoff/gofh"
+      "fmt"
+      "os"
+  )
+  func main() {
+  	fh := gofh.Init()
+  	fh.HandleCommand("init", initProject)
+  	fh.HandleCommand("deploy", deployProject)
+  	fh.SetDefaultHandler(showUsage)
+  	fh.Parse(os.Args[1:])
+  }
+  func showUsage() {
+  	fmt.Println("Please, use 'project init' or 'project deploy' command")
+  }
+  func initProject(options map[string]string) {
+  	fmt.Println("Your init project code goes here")
+  }
+  func deployProject(options map[string]string) {
+  	fmt.Println("Your deploy project code goes here")
+  }
 
 * Go flags handler options
 
