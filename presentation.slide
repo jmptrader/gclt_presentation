@@ -1,0 +1,93 @@
+Command line tools development in Go
+
+Andrey Romanov
+BMC Software
+
+* Advantages of google go for command line tools
+
+* Ease of development/readability
+
+- Very readable specification (http://golang.org/ref/spec)
+- Concurrency
+.code /presentation/concurrency.go
+- Interfaces
+- Static typing
+
+* Great standard library
+
+- Compression (bzip2, gzip, lzw)
+- Cryptography (sha1, rsa, dsa) (code.google.com/p/go.crypto includes additional cryptographic algorithms)
+- Templates
+- Http, Rpc, Xml, Json
+
+* Performance
+
+- dl.google.com
+- youtube vitess
+
+* One binary
+
+* Arguments parsing
+
+* Args
+
+.play /presentation/args.go
+
+* Go flags
+
+.play /presentation/flags.go
+
+* Go flags init
+
+.play /presentation/flags_init.go
+
+* Flag types
+
+- Bool
+- String
+- Int
+- Uint
+- Int64
+- Float64
+- Duration
+
+* Go flags variables
+
+.play /presentation/flags_var.go
+
+* Print defaults
+
+.play /presentation/flags_help.go
+
+* Go flagset
+
+.play /presentation/flagset.go
+
+* Writing tools with git like interface
+
+- git init
+- git add
+- git commit
+- git push
+
+* http.HandleFunc
+
+  func main() {
+      http.HandleFunc("/view/", viewHandler)
+      http.HandleFunc("/edit/", editHandler)
+      http.HandleFunc("/save/", saveHandler)
+      http.ListenAndServe(":8080", nil)
+  }
+
+* Go flags handler
+
+.play /presentation/gofh.go
+
+* Go flags handler options
+
+  options := []*gofh.Option{
+    &gofh.Option{Name: "no-css", Boolean: true}
+    &gofh.Option{Name: "db"}
+  }
+
+  gofh.HandleCommandWithOptions("init", options, initHandler)
